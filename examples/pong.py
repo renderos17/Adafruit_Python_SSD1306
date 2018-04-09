@@ -129,6 +129,19 @@ oldBallY = 0
 
 
 def moveBall():
+
+    global paddleX
+    global paddleY
+    global oldPaddleX
+    global oldPaddleY
+    global ballDirectionX
+    global ballDirectionY
+    global ballSpeed
+    global ballX
+    global ballY
+    global oldBallX
+    global oldBallY
+
     if (ballX > width) or (ballX < 0):
         ballDirectionX = -ballDirectionX
 
