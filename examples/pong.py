@@ -56,7 +56,7 @@ GPIO.setup(C_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Input with pull-up
 
 
 # Raspberry Pi pin configuration:
-RST = 24
+RST = None
 # Note the following are only used with SPI:
 DC = 23
 SPI_PORT = 0
@@ -127,6 +127,36 @@ ballY = 0
 oldBallX = 0
 oldBallY = 0
 
+
+def moveBall():
+    if (ballX > width) or (ballX < 0):
+        ballDirectionX = -ballDirectionX
+
+    if (ballY > height) or (ballY < 0):
+        ballDirectionY = -ballDirectionY
+
+    if(inPaddle(ballX, ballY, paddleX, paddleY, 20, 5)):
+        ballDirectionX = -ballDirectionX
+        ballDirectionY = -ballDirectionY
+
+    ballX += ballDirectionX
+    ballY += ballDirectionY
+
+    if (oldBallX != ballX) or (oldBallY != ballY):
+        draw.rectangle((oldBallX, oldBallY, 5, 5), outline=0, fill=0)
+
+    draw.rectangle((ballX, ballY, 5, 5), outline=0, fill=0)
+
+    oldBallX = ballX
+    oldBallY = ballY
+
+
+def inPaddle(x, y, rectX, rectY, rectWidth, rectHeight):
+    result = False
+    if ((x >= rectX and x <= (rectX + rectWidth)) and (y >= rectY and y <= (rectY + rectHeight))):
+        result = True
+    return result
+
 try:
     while 1:
         # draw.polygon([(30, 60), (40, 42), (20, 42)], outline=255, fill=0) 
@@ -188,32 +218,3 @@ try:
 
 except KeyboardInterrupt: 
     GPIO.cleanup()
-
-def moveBall():
-    if (ballX > width) or (ballX < 0):
-        ballDirectionX = -ballDirectionX
-
-    if (ballY > height) or (ballY < 0):
-        ballDirectionY = -ballDirectionY
-
-    if(inPaddle(ballX, ballY, paddleX, paddleY, 20, 5)):
-        ballDirectionX = -ballDirectionX
-        ballDirectionY = -ballDirectionY
-
-    ballX += ballDirectionX
-    ballY += ballDirectionY
-
-    if (oldBallX != ballX) or (oldBallY != ballY):
-        draw.rectangle((oldBallX, oldBallY, 5, 5), outline=0, fill=0)
-
-    draw.rectangle((ballX, ballY, 5, 5), outline=0, fill=0)
-
-    oldBallX = ballX
-    oldBallY = ballY
-
-
-def inPaddle(x, y, rectX, rectY, rectWidth, rectHeight):
-    result = False
-    if ((x >= rectX and x <= (rectX + rectWidth)) and (y >= rectY and y <= (rectY + rectHeight))):
-        result = True
-    return result
