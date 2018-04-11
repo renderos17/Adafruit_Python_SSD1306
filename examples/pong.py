@@ -226,7 +226,8 @@ try:
 
         moveBall()
 
-        disp.display() 
+        disp.display()
+        time.sleep(0.01)
 
 
 except KeyboardInterrupt: 
